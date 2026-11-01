@@ -14,9 +14,9 @@ export default defineConfig({
       injectRegister: 'auto',
       manifest: {
         id: '/',
-        name: 'BedtimeNest: Calm Sleep Stories for Kids',
-        short_name: 'BedtimeNest',
-        description: 'Screen-free, calming bedtime audio stories and gentle ambient sleep soundscapes for kids.',
+        name: 'NabiX Nest: Calm Sleep Stories for Kids',
+        short_name: 'NabiX Nest',
+        description: 'Screen-free, calming bedtime audio stories and gentle ambient sleep soundscapes with NabiX Nest.',
         theme_color: '#07051a',
         background_color: '#07051a',
         display: 'standalone',

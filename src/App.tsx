@@ -15,7 +15,7 @@ export function App() {
   const [stories, setStories] = useState<Story[]>(BEDTIME_STORIES);
   const [favorites, setFavorites] = useState<string[]>(() => {
     try {
-      const saved = localStorage.getItem('bedtimenest_favorites');
+      const saved = localStorage.getItem('nabix_favorites') || localStorage.getItem('bedtimenest_favorites');
       return saved ? JSON.parse(saved) : ['barnaby-bear'];
     } catch {
       return ['barnaby-bear'];
@@ -23,7 +23,7 @@ export function App() {
   });
   const [streak, setStreak] = useState<number>(() => {
     try {
-      const saved = localStorage.getItem('bedtimenest_streak');
+      const saved = localStorage.getItem('nabix_streak') || localStorage.getItem('bedtimenest_streak');
       return saved ? parseInt(saved, 10) : 5;
     } catch {
       return 5;
@@ -48,7 +48,7 @@ export function App() {
   // Load custom saved stories (with automatic migration to tts:custom narration)
   useEffect(() => {
     try {
-      const customSaved = localStorage.getItem('bedtimenest_custom_stories');
+      const customSaved = localStorage.getItem('nabix_custom_stories') || localStorage.getItem('bedtimenest_custom_stories');
       if (customSaved) {
         const parsed = JSON.parse(customSaved);
         if (Array.isArray(parsed) && parsed.length > 0) {
@@ -58,7 +58,7 @@ export function App() {
             }
             return s;
           });
-          localStorage.setItem('bedtimenest_custom_stories', JSON.stringify(migrated));
+          localStorage.setItem('nabix_custom_stories', JSON.stringify(migrated));
           setStories([...BEDTIME_STORIES, ...migrated]);
         }
       }
@@ -70,7 +70,7 @@ export function App() {
   const handleToggleFavorite = (storyId: string) => {
     setFavorites((prev) => {
       const next = prev.includes(storyId) ? prev.filter((id) => id !== storyId) : [...prev, storyId];
-      localStorage.setItem('bedtimenest_favorites', JSON.stringify(next));
+      localStorage.setItem('nabix_favorites', JSON.stringify(next));
       return next;
     });
   };
@@ -79,7 +79,7 @@ export function App() {
     setStories((prev) => {
       const next = [newStory, ...prev];
       const customOnly = next.filter((s) => s.id.startsWith('custom-'));
-      localStorage.setItem('bedtimenest_custom_stories', JSON.stringify(customOnly));
+      localStorage.setItem('nabix_custom_stories', JSON.stringify(customOnly));
       return next;
     });
     sleepPlayer.playStory(newStory);
@@ -94,7 +94,7 @@ export function App() {
       // Increment streak
       const newStreak = streak + 1;
       setStreak(newStreak);
-      localStorage.setItem('bedtimenest_streak', newStreak.toString());
+      localStorage.setItem('nabix_streak', newStreak.toString());
     }
     setShowPlayerModal(true);
   };

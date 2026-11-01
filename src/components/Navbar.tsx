@@ -40,7 +40,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             flexShrink: 0,
           }}
         >
-          <span style={{ fontSize: '20px' }}>🌙</span>
+          <span style={{ fontSize: '20px' }}>🦉</span>
         </div>
         <div style={{ minWidth: 0 }}>
           <h1
@@ -54,13 +54,13 @@ export const Navbar: React.FC<NavbarProps> = ({
               whiteSpace: 'nowrap',
             }}
           >
-            BedtimeNest
+            NabiX Nest
           </h1>
           <span
             className="navbar-subtitle"
             style={{ fontSize: '0.7rem', color: '#94a3b8', letterSpacing: '0.04em', display: 'block', whiteSpace: 'nowrap' }}
           >
-            SCREEN-FREE SLEEP STORIES
+            CALM BEDTIME SLEEP STORIES
           </span>
         </div>
       </div>
