@@ -94,6 +94,7 @@ export const CustomStoryCreatorModal: React.FC<CustomStoryCreatorModalProps> = (
 
   return (
     <div
+      className="safe-modal-overlay"
       style={{
         position: 'fixed',
         inset: 0,
@@ -103,7 +104,6 @@ export const CustomStoryCreatorModal: React.FC<CustomStoryCreatorModalProps> = (
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '16px',
         overflowY: 'auto',
       }}
       onClick={(e) => {
@@ -118,7 +118,7 @@ export const CustomStoryCreatorModal: React.FC<CustomStoryCreatorModalProps> = (
         style={{
           width: '100%',
           maxWidth: '520px',
-          maxHeight: '92vh',
+          maxHeight: '90vh',
           display: 'flex',
           flexDirection: 'column',
           padding: '20px',
@@ -140,8 +140,10 @@ export const CustomStoryCreatorModal: React.FC<CustomStoryCreatorModalProps> = (
             onClick={onClose}
             aria-label="Close modal"
             style={{
-              width: '40px',
-              height: '40px',
+              width: '42px',
+              height: '42px',
+              minWidth: '42px',
+              minHeight: '42px',
               borderRadius: '50%',
               background: 'rgba(255, 255, 255, 0.1)',
               border: '1px solid rgba(255, 255, 255, 0.15)',

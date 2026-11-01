@@ -14,9 +14,8 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   return (
     <header
-      className="glass-panel"
+      className="glass-panel safe-header"
       style={{
-        margin: '12px 12px 0 12px',
         padding: '10px 14px',
         display: 'flex',
         alignItems: 'center',
@@ -73,14 +72,16 @@ export const Navbar: React.FC<NavbarProps> = ({
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '4px',
-            padding: '6px 10px',
-            fontSize: '0.8rem',
+            gap: '5px',
+            padding: '8px 12px',
+            fontSize: '0.82rem',
             color: '#fbbf24',
+            minHeight: '40px',
+            boxSizing: 'border-box',
           }}
           title="Peaceful bedtime streak"
         >
-          <Flame size={15} />
+          <Flame size={16} />
           <span style={{ fontWeight: 600 }}>{streak}</span>
           <span className="navbar-streak-label" style={{ color: '#cbd5e1', fontSize: '0.72rem' }}>nights</span>
         </div>
@@ -92,18 +93,19 @@ export const Navbar: React.FC<NavbarProps> = ({
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '5px',
-            padding: '6px 10px',
-            fontSize: '0.8rem',
+            gap: '6px',
+            padding: '8px 12px',
+            fontSize: '0.82rem',
             color: '#c084fc',
             cursor: 'pointer',
             border: '1px solid rgba(192, 132, 252, 0.35)',
             background: 'rgba(192, 132, 252, 0.12)',
-            minHeight: '36px',
+            minHeight: '40px',
+            boxSizing: 'border-box',
           }}
           title="Create a personalized story for your child"
         >
-          <Sparkles size={15} />
+          <Sparkles size={16} />
           <span className="navbar-personalize-text">Create Story</span>
         </button>
 
@@ -115,17 +117,20 @@ export const Navbar: React.FC<NavbarProps> = ({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            width: '36px',
-            height: '36px',
+            width: '40px',
+            height: '40px',
+            minWidth: '40px',
+            minHeight: '40px',
             color: '#38bdf8',
             cursor: 'pointer',
             border: '1px solid rgba(56, 189, 248, 0.35)',
             background: 'rgba(56, 189, 248, 0.12)',
             flexShrink: 0,
+            boxSizing: 'border-box',
           }}
           title="Pitch-Black OLED Sleep Mode (Dims screen completely)"
         >
-          <Moon size={16} />
+          <Moon size={17} />
         </button>
       </div>
     </header>

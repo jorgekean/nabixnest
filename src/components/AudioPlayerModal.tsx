@@ -75,12 +75,9 @@ export const AudioPlayerModal: React.FC<AudioPlayerModalProps> = ({
   if (!isExpanded) {
     return (
       <div
-        className="glass-panel"
+        className="glass-panel safe-bottom-bar"
         style={{
           position: 'fixed',
-          bottom: '12px',
-          left: '12px',
-          right: '12px',
           padding: '10px 14px',
           display: 'flex',
           alignItems: 'center',
@@ -122,8 +119,8 @@ export const AudioPlayerModal: React.FC<AudioPlayerModalProps> = ({
             }}
             aria-label={isPlaying ? 'Pause' : 'Play'}
             style={{
-              width: '38px',
-              height: '38px',
+              width: '42px',
+              height: '42px',
               borderRadius: '50%',
               background: '#fbbf24',
               border: 'none',
@@ -135,7 +132,7 @@ export const AudioPlayerModal: React.FC<AudioPlayerModalProps> = ({
               flexShrink: 0,
             }}
           >
-            {isPlaying ? <Pause size={18} fill="#07051a" /> : <Play size={18} fill="#07051a" style={{ marginLeft: '2px' }} />}
+            {isPlaying ? <Pause size={20} fill="#07051a" /> : <Play size={20} fill="#07051a" style={{ marginLeft: '2px' }} />}
           </button>
 
           <button
@@ -146,8 +143,8 @@ export const AudioPlayerModal: React.FC<AudioPlayerModalProps> = ({
             }}
             aria-label="Expand player"
             style={{
-              width: '34px',
-              height: '34px',
+              width: '40px',
+              height: '40px',
               borderRadius: '50%',
               background: 'rgba(255, 255, 255, 0.08)',
               border: '1px solid rgba(255, 255, 255, 0.1)',
@@ -159,7 +156,7 @@ export const AudioPlayerModal: React.FC<AudioPlayerModalProps> = ({
               flexShrink: 0,
             }}
           >
-            <ChevronUp size={18} />
+            <ChevronUp size={20} />
           </button>
 
           <button
@@ -170,8 +167,8 @@ export const AudioPlayerModal: React.FC<AudioPlayerModalProps> = ({
             }}
             aria-label="Stop and close player"
             style={{
-              width: '34px',
-              height: '34px',
+              width: '40px',
+              height: '40px',
               borderRadius: '50%',
               background: 'rgba(255, 255, 255, 0.08)',
               border: '1px solid rgba(255, 255, 255, 0.1)',
@@ -183,7 +180,7 @@ export const AudioPlayerModal: React.FC<AudioPlayerModalProps> = ({
               flexShrink: 0,
             }}
           >
-            <X size={16} />
+            <X size={18} />
           </button>
         </div>
       </div>
@@ -193,6 +190,7 @@ export const AudioPlayerModal: React.FC<AudioPlayerModalProps> = ({
   // Full Expanded Player Modal
   return (
     <div
+      className="safe-modal-overlay"
       style={{
         position: 'fixed',
         inset: 0,
@@ -204,7 +202,6 @@ export const AudioPlayerModal: React.FC<AudioPlayerModalProps> = ({
         alignItems: 'center',
         justifyContent: 'flex-start',
         overflowY: 'auto',
-        padding: '16px 14px',
       }}
       onClick={(e) => {
         // Tapping backdrop minimizes or dismisses
@@ -221,17 +218,18 @@ export const AudioPlayerModal: React.FC<AudioPlayerModalProps> = ({
             onClick={() => setIsExpanded(false)}
             className="glass-pill"
             style={{
-              padding: '7px 12px',
+              padding: '8px 14px',
+              minHeight: '42px',
               display: 'flex',
               alignItems: 'center',
-              gap: '4px',
+              gap: '6px',
               color: '#cbd5e1',
               cursor: 'pointer',
-              fontSize: '0.82rem',
+              fontSize: '0.85rem',
               flexShrink: 0,
             }}
           >
-            <ChevronDown size={17} />
+            <ChevronDown size={18} />
             <span>Minimize</span>
           </button>
 
@@ -256,8 +254,10 @@ export const AudioPlayerModal: React.FC<AudioPlayerModalProps> = ({
             onClick={onClose}
             aria-label="Close player"
             style={{
-              width: '38px',
-              height: '38px',
+              width: '42px',
+              height: '42px',
+              minWidth: '42px',
+              minHeight: '42px',
               borderRadius: '50%',
               background: 'rgba(255, 255, 255, 0.1)',
               border: '1px solid rgba(255, 255, 255, 0.15)',

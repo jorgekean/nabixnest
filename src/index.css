@@ -150,6 +150,40 @@ input[type="range"]::-webkit-slider-thumb:hover {
   scrollbar-width: none;
 }
 
+/* ------------------------------------------------------------------ */
+/*  Mobile PWA & Notch / Status Bar Safe Area Ergonomics              */
+/* ------------------------------------------------------------------ */
+.safe-header {
+  margin-top: max(calc(env(safe-area-inset-top, 0px) + 8px), 14px);
+  margin-left: max(env(safe-area-inset-left, 0px), 12px);
+  margin-right: max(env(safe-area-inset-right, 0px), 12px);
+}
+
+@media all and (display-mode: standalone), (max-width: 640px) {
+  .safe-header {
+    /* Guarantees the navbar and top buttons sit completely below phone status bar, clock, battery, camera notch/island */
+    margin-top: max(calc(env(safe-area-inset-top, 0px) + 12px), 36px) !important;
+  }
+}
+
+.safe-modal-overlay {
+  padding-top: max(calc(env(safe-area-inset-top, 0px) + 18px), 40px) !important;
+  padding-bottom: max(calc(env(safe-area-inset-bottom, 0px) + 18px), 24px) !important;
+  padding-left: max(env(safe-area-inset-left, 0px), 14px) !important;
+  padding-right: max(env(safe-area-inset-right, 0px), 14px) !important;
+}
+
+.safe-bottom-bar {
+  bottom: max(calc(env(safe-area-inset-bottom, 0px) + 12px), 20px) !important;
+  left: max(env(safe-area-inset-left, 0px), 12px) !important;
+  right: max(env(safe-area-inset-right, 0px), 12px) !important;
+}
+
+/* Touch targets optimization */
+button, [role="button"] {
+  touch-action: manipulation;
+}
+
 @media (max-width: 640px) {
   .navbar-subtitle {
     display: none !important;
