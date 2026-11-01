@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { X, Sparkles, Heart } from 'lucide-react';
+import { X, Sparkles, Heart, Lightbulb } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import type { Story } from '../data/stories';
+import { weaveBedtimeStory } from '../utils/storyGenerator';
 
 interface CustomStoryCreatorModalProps {
   onClose: () => void;
@@ -13,6 +14,7 @@ export const CustomStoryCreatorModal: React.FC<CustomStoryCreatorModalProps> = (
   onSaveCustomStory,
 }) => {
   const [childName, setChildName] = useState<string>('');
+  const [topic, setTopic] = useState<string>('');
   const [character, setCharacter] = useState<string>('Cozy Bear');
   const [theme, setTheme] = useState<string>('Calming a busy body');
   const [isGenerated, setIsGenerated] = useState<boolean>(false);
@@ -32,40 +34,43 @@ export const CustomStoryCreatorModal: React.FC<CustomStoryCreatorModalProps> = (
     { title: 'Sharing & kindness with siblings', milestone: 'Empathy & gentle connection' },
   ];
 
+  const inspirationPills = [
+    { label: '🦕 Sleepy Dinosaur', topic: 'a gentle dinosaur finding a warm glowing cave' },
+    { label: '🚀 Moonlit Space Voyage', topic: 'floating softly in a quiet starlight spaceship' },
+    { label: '🚂 Cloud Train', topic: 'a cozy train gliding across fluffy marshmallow clouds' },
+    { label: '🌊 Ocean Sea Turtle', topic: 'a wise sea turtle swimming gently under starry waves' },
+    { label: '🏰 Floating Cloud Castle', topic: 'a secret castle made of soft feather clouds' },
+  ];
+
   const handleGenerate = (e: React.FormEvent) => {
     e.preventDefault();
     const name = childName.trim() || 'Little Star';
     const char = characters.find(c => c.name === character) || characters[0];
     const th = themes.find(t => t.title === theme) || themes[0];
+    const chosenTopic = topic.trim() || 'a peaceful voyage through the starry night';
 
-    const customText = `Tonight... the silver stars twinkled especially bright right over ${name}'s cozy bedroom window. 
-Far away in the Whispering Woods, ${char.name} was also getting ready for bed. 
-
-"${name} had such a big, adventurous day," whispered Mama softly... smoothing the blankets over ${name}'s warm shoulders. 
-"And just like ${char.name}... your body has done so much climbing, running, and learning today."
-
-${char.name} tucked in beside the warm moss... taking a slow, deep breath in... one... two... three... and letting out a gentle evening sigh... four... five... six. 
-${name} did the exact same breath. 
-In went the calm starlight... out went all the busy wiggles.
-
-"Whenever you close your eyes, ${name}," whispered the gentle night breeze... "you are warm... you are loved... and you are completely safe."
-The room was quiet and peaceful. 
-${name}'s eyelids grew heavy... like soft velvet curtains. 
-Goodnight, ${char.name}... Goodnight, world... Sweet dreams, precious ${name}.`;
+    const woven = weaveBedtimeStory({
+      childName: name,
+      topic: chosenTopic,
+      companionName: char.name,
+      companionEmoji: char.emoji,
+      theme: th.title,
+      milestone: th.milestone,
+    });
 
     const newStory: Story = {
       id: `custom-${Date.now()}`,
-      title: `${name} & ${char.name}’s Starlit Journey`,
+      title: woven.title,
       character: char.name,
       characterEmoji: char.emoji,
-      durationMinutes: 3,
-      audioUrl: '/audio/stories/barnaby-bear.mp3', // Uses ambient / soothing voice fallback
+      durationMinutes: 4,
+      audioUrl: '/audio/stories/barnaby-bear.mp3', // Uses studio soothing bedtime narration fallback
       theme: th.title,
       themeColor: char.color,
-      tagline: `A personalized bedtime story for ${name}`,
-      synopsis: `A gentle sleepy bedtime adventure personalized for ${name} to help unwind and feel cozy and safe.`,
+      tagline: woven.tagline,
+      synopsis: woven.synopsis,
       learningMilestone: th.milestone,
-      fullText: customText,
+      fullText: woven.fullText,
     };
 
     setGeneratedStory(newStory);
@@ -126,7 +131,7 @@ Goodnight, ${char.name}... Goodnight, world... Sweet dreams, precious ${name}.`;
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#c084fc', minWidth: 0 }}>
             <Sparkles size={20} style={{ flexShrink: 0 }} />
             <h3 style={{ fontSize: '1.25rem', color: '#ffffff', lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              {isGenerated ? 'Story Preview' : 'Personalize Story'}
+              {isGenerated ? 'Generated Story' : 'Generate Bedtime Story'}
             </h3>
           </div>
 
@@ -157,7 +162,7 @@ Goodnight, ${char.name}... Goodnight, world... Sweet dreams, precious ${name}.`;
         {!isGenerated ? (
           <form onSubmit={handleGenerate} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <p style={{ fontSize: '0.82rem', color: '#94a3b8', marginTop: '-6px' }}>
-              Enter your child’s name and bedtime milestone to weave them into tonight’s sleep story.
+              Type any story idea your child dreams about tonight, and we’ll weave it into a gentle, relaxing bedtime tale.
             </p>
 
             {/* Child's Name */}
@@ -182,6 +187,57 @@ Goodnight, ${char.name}... Goodnight, world... Sweet dreams, precious ${name}.`;
                   outline: 'none',
                 }}
               />
+            </div>
+
+            {/* Freeform Story Topic / Dream Idea */}
+            <div>
+              <label style={{ display: 'block', fontSize: '0.85rem', color: '#e2e8f0', fontWeight: 600, marginBottom: '6px' }}>
+                What should tonight’s story be about?
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. A sleepy dinosaur in a crystal cave, cloud train, space voyage..."
+                value={topic}
+                onChange={(e) => setTopic(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '12px 16px',
+                  borderRadius: '14px',
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  color: '#ffffff',
+                  fontSize: '0.92rem',
+                  outline: 'none',
+                  marginBottom: '8px',
+                }}
+              />
+
+              {/* Inspiration Pills */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px', color: '#fbbf24', fontSize: '0.74rem', fontWeight: 600 }}>
+                <Lightbulb size={13} />
+                <span>Quick Dream Ideas (Tap to fill):</span>
+              </div>
+              <div className="no-scrollbar" style={{ display: 'flex', gap: '6px', overflowX: 'auto', paddingBottom: '4px' }}>
+                {inspirationPills.map((pill) => (
+                  <button
+                    key={pill.label}
+                    type="button"
+                    onClick={() => setTopic(pill.topic)}
+                    className="glass-pill"
+                    style={{
+                      padding: '5px 10px',
+                      fontSize: '0.74rem',
+                      color: topic === pill.topic ? '#fbbf24' : '#cbd5e1',
+                      border: topic === pill.topic ? '1px solid #fbbf24' : '1px solid rgba(255, 255, 255, 0.12)',
+                      background: topic === pill.topic ? 'rgba(251, 191, 36, 0.18)' : 'rgba(255, 255, 255, 0.04)',
+                      cursor: 'pointer',
+                      flexShrink: 0,
+                    }}
+                  >
+                    {pill.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Animal Companion Selection */}

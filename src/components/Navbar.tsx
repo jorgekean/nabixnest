@@ -104,7 +104,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           title="Create a personalized story for your child"
         >
           <Sparkles size={15} />
-          <span className="navbar-personalize-text">Personalize</span>
+          <span className="navbar-personalize-text">Create Story</span>
         </button>
 
         {/* Black Screen Sleep Mode Quick Trigger */}
