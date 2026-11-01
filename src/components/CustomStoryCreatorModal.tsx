@@ -101,26 +101,64 @@ Goodnight, ${char.name}... Goodnight, world... Sweet dreams, precious ${name}.`;
         padding: '16px',
         overflowY: 'auto',
       }}
+      onClick={(e) => {
+        // Close if tapping backdrop
+        if (e.target === e.currentTarget) {
+          onClose();
+        }
+      }}
     >
-      <div className="glass-panel" style={{ width: '100%', maxWidth: '520px', padding: '24px', position: 'relative' }}>
-        <button
-          onClick={onClose}
-          style={{ position: 'absolute', top: '20px', right: '20px', background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer' }}
-        >
-          <X size={22} />
-        </button>
+      <div
+        className="glass-panel"
+        style={{
+          width: '100%',
+          maxWidth: '520px',
+          maxHeight: '92vh',
+          display: 'flex',
+          flexDirection: 'column',
+          padding: '20px',
+          position: 'relative',
+          overflowY: 'auto',
+        }}
+      >
+        {/* Dedicated Non-Overlapping Header with Large Touch Close Button */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#c084fc', minWidth: 0 }}>
+            <Sparkles size={20} style={{ flexShrink: 0 }} />
+            <h3 style={{ fontSize: '1.25rem', color: '#ffffff', lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              {isGenerated ? 'Story Preview' : 'Personalize Story'}
+            </h3>
+          </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close modal"
+            style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              background: 'rgba(255, 255, 255, 0.1)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              color: '#cbd5e1',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+              zIndex: 10,
+              transition: 'background 0.15s ease',
+            }}
+          >
+            <X size={20} />
+          </button>
+        </div>
 
         {!isGenerated ? (
-          <form onSubmit={handleGenerate} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#c084fc', marginBottom: '6px' }}>
-                <Sparkles size={18} />
-                <h3 style={{ fontSize: '1.3rem', color: '#ffffff' }}>Personalize Bedtime Story</h3>
-              </div>
-              <p style={{ fontSize: '0.82rem', color: '#94a3b8' }}>
-                Enter your child’s name and emotional milestone to weave them into tonight’s sleep story.
-              </p>
-            </div>
+          <form onSubmit={handleGenerate} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <p style={{ fontSize: '0.82rem', color: '#94a3b8', marginTop: '-6px' }}>
+              Enter your child’s name and bedtime milestone to weave them into tonight’s sleep story.
+            </p>
 
             {/* Child's Name */}
             <div>

@@ -39,14 +39,11 @@ export function App() {
   useEffect(() => {
     const unsubscribe = sleepPlayer.subscribe((newState) => {
       setPlayerState(newState);
-      if (newState.currentStory && !showPlayerModal) {
-        setShowPlayerModal(true);
-      }
     });
     return () => {
       unsubscribe();
     };
-  }, [showPlayerModal]);
+  }, []);
 
   // Load custom saved stories
   useEffect(() => {
@@ -95,6 +92,11 @@ export function App() {
     setShowPlayerModal(true);
   };
 
+  const handleClosePlayer = () => {
+    sleepPlayer.stopAll();
+    setShowPlayerModal(false);
+  };
+
   // Filtered stories
   const filteredStories = stories.filter((s) => {
     if (activeFilter === 'favorites') return favorites.includes(s.id);
@@ -114,31 +116,31 @@ export function App() {
       />
 
       {/* Main Content Container */}
-      <main style={{ flex: 1, maxWidth: '1080px', width: '100%', margin: '0 auto', padding: '24px 16px 120px 16px', display: 'flex', flexDirection: 'column', gap: '28px' }}>
+      <main style={{ flex: 1, maxWidth: '1080px', width: '100%', margin: '0 auto', padding: '16px 14px 110px 14px', display: 'flex', flexDirection: 'column', gap: '22px' }}>
         
         {/* Hero Bedtime Greeting Card */}
         <section
-          className="glass-panel"
+          className="glass-panel hero-card"
           style={{
-            padding: '32px 24px',
+            padding: '24px 20px',
             position: 'relative',
             overflow: 'hidden',
             display: 'flex',
             flexDirection: 'column',
-            gap: '16px',
+            gap: '14px',
             background: 'radial-gradient(ellipse 90% 80% at 90% 10%, rgba(251, 191, 36, 0.12), rgba(18, 12, 45, 0.8))',
             border: '1px solid rgba(251, 191, 36, 0.25)',
           }}
         >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
-            <div style={{ maxWidth: '640px' }}>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '9999px', background: 'rgba(251, 191, 36, 0.15)', color: '#fbbf24', fontSize: '0.8rem', fontWeight: 600, marginBottom: '10px' }}>
-                <Moon size={14} fill="#fbbf24" /> Screen-Free Nightstand Audio
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '14px' }}>
+            <div style={{ maxWidth: '640px', flex: '1 1 280px' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '9999px', background: 'rgba(251, 191, 36, 0.15)', color: '#fbbf24', fontSize: '0.78rem', fontWeight: 600, marginBottom: '8px' }}>
+                <Moon size={13} fill="#fbbf24" /> Screen-Free Nightstand Audio
               </div>
-              <h2 style={{ fontSize: '2.1rem', color: '#ffffff', lineHeight: 1.15, marginBottom: '8px' }}>
+              <h2 className="hero-heading" style={{ fontSize: '1.9rem', color: '#ffffff', lineHeight: 1.15, marginBottom: '8px' }}>
                 Good evening, little dreamers.
               </h2>
-              <p style={{ color: '#cbd5e1', fontSize: '0.95rem', lineHeight: 1.55 }}>
+              <p style={{ color: '#cbd5e1', fontSize: '0.9rem', lineHeight: 1.5 }}>
                 Gentle, whisper-paced bedtime stories read by soothing neural voices. 
                 Paired with soft rain, starlight crickets, and a pitch-black sleep screen to protect melatonin.
               </p>
@@ -146,18 +148,19 @@ export function App() {
 
             {/* Quick Start Routine Button */}
             <button
+              className="hero-cta-btn"
               onClick={() => handlePlayStory(stories[0])}
               style={{
-                padding: '14px 22px',
-                borderRadius: '18px',
+                padding: '12px 20px',
+                borderRadius: '16px',
                 border: 'none',
                 background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
                 color: '#07051a',
                 fontWeight: 700,
-                fontSize: '0.95rem',
+                fontSize: '0.92rem',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '10px',
+                gap: '8px',
                 cursor: 'pointer',
                 boxShadow: '0 8px 25px rgba(251, 191, 36, 0.4)',
               }}
@@ -167,34 +170,34 @@ export function App() {
           </div>
 
           {/* Value Props Row */}
-          <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', borderTop: '1px solid rgba(255, 255, 255, 0.1)', paddingTop: '16px', marginTop: '4px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem', color: '#94a3b8' }}>
-              <ShieldCheck size={16} color="#34d399" />
+          <div style={{ display: 'flex', gap: '12px 18px', flexWrap: 'wrap', borderTop: '1px solid rgba(255, 255, 255, 0.1)', paddingTop: '12px', marginTop: '2px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: '#94a3b8' }}>
+              <ShieldCheck size={15} color="#34d399" />
               <span>Zero Screen Stimulation</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem', color: '#94a3b8' }}>
-              <Volume2 size={16} color="#38bdf8" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: '#94a3b8' }}>
+              <Volume2 size={15} color="#38bdf8" />
               <span>Smooth 60s Fade-Out Timer</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem', color: '#94a3b8' }}>
-              <Heart size={16} color="#fbbf24" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: '#94a3b8' }}>
+              <Heart size={15} color="#fbbf24" />
               <span>Pediatric Sleep Psychology</span>
             </div>
           </div>
         </section>
 
         {/* Ambient Soundscape Quick-Bar */}
-        <section className="glass-panel" style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#fde68a', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              🌧️ Ambient Sleep Sounds (Plays In Background)
+        <section className="glass-panel" style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#fde68a', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              🌧️ Ambient Sleep Sounds
             </span>
-            <span style={{ fontSize: '0.78rem', color: '#94a3b8' }}>
+            <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
               Active: <strong style={{ color: '#38bdf8' }}>{playerState.ambientType}</strong>
             </span>
           </div>
 
-          <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '4px' }}>
+          <div className="no-scrollbar" style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '4px' }}>
             {[
               { type: 'rain' as AmbientType, label: 'Soft Warm Rain', icon: CloudRain, color: '#38bdf8' },
               { type: 'crickets' as AmbientType, label: 'Night Crickets', icon: Wind, color: '#34d399' },
@@ -209,21 +212,21 @@ export function App() {
                   key={sound.type}
                   onClick={() => sleepPlayer.setAmbientType(sound.type)}
                   style={{
-                    flex: '1 0 auto',
-                    padding: '10px 16px',
-                    borderRadius: '14px',
+                    flex: '0 0 auto',
+                    padding: '8px 14px',
+                    borderRadius: '12px',
                     background: isSelected ? 'rgba(56, 189, 248, 0.2)' : 'rgba(255, 255, 255, 0.05)',
                     border: isSelected ? `1px solid ${sound.color}` : '1px solid rgba(255, 255, 255, 0.1)',
                     color: isSelected ? sound.color : '#cbd5e1',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '8px',
+                    gap: '6px',
                     cursor: 'pointer',
-                    fontSize: '0.82rem',
+                    fontSize: '0.8rem',
                     fontWeight: 600,
                   }}
                 >
-                  <Icon size={16} />
+                  <Icon size={15} />
                   <span>{sound.label}</span>
                 </button>
               );
@@ -232,22 +235,22 @@ export function App() {
         </section>
 
         {/* Story Shelf Header & Filter Tabs */}
-        <section style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+        <section style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
             <div>
-              <h3 style={{ fontSize: '1.5rem', color: '#ffffff' }}>Tonight’s Sleep Stories</h3>
-              <p style={{ fontSize: '0.85rem', color: '#94a3b8' }}>
+              <h3 style={{ fontSize: '1.35rem', color: '#ffffff' }}>Tonight’s Sleep Stories</h3>
+              <p style={{ fontSize: '0.82rem', color: '#94a3b8' }}>
                 Calming tales designed to slow down heart rates and guide heavy eyelids.
               </p>
             </div>
 
             {/* Filter Pills */}
-            <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '4px' }}>
+            <div className="no-scrollbar" style={{ display: 'flex', gap: '6px', overflowX: 'auto', paddingBottom: '4px' }}>
               {[
                 { id: 'all', label: '🌟 All' },
-                { id: 'favorites', label: `⭐ Favorites (${favorites.length})` },
+                { id: 'favorites', label: `⭐ Favs (${favorites.length})` },
                 { id: 'busy-body', label: '🐻 Busy Body' },
-                { id: 'dark-safe', label: '🦉 Dark Safety' },
+                { id: 'dark-safe', label: '🦉 Safe Dark' },
                 { id: 'worries', label: '🦦 Worries' },
               ].map((tab) => {
                 const isSelected = activeFilter === tab.id;
@@ -257,13 +260,14 @@ export function App() {
                     onClick={() => setActiveFilter(tab.id)}
                     className="glass-pill"
                     style={{
-                      padding: '6px 14px',
-                      fontSize: '0.8rem',
+                      padding: '6px 12px',
+                      fontSize: '0.78rem',
                       fontWeight: 600,
                       cursor: 'pointer',
                       background: isSelected ? 'rgba(251, 191, 36, 0.25)' : 'rgba(255, 255, 255, 0.05)',
                       border: isSelected ? '1px solid #fbbf24' : '1px solid rgba(255, 255, 255, 0.1)',
                       color: isSelected ? '#fbbf24' : '#cbd5e1',
+                      flexShrink: 0,
                     }}
                   >
                     {tab.label}
@@ -273,12 +277,12 @@ export function App() {
             </div>
           </div>
 
-          {/* Stories Grid */}
+          {/* Stories Grid with Responsive minmax */}
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(310px, 1fr))',
-              gap: '20px',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))',
+              gap: '16px',
             }}
           >
             {filteredStories.map((story) => (
@@ -314,7 +318,7 @@ export function App() {
           onSetAmbientType={(t) => sleepPlayer.setAmbientType(t)}
           onSetSleepTimer={(m) => sleepPlayer.setSleepTimer(m)}
           onToggleBlackScreen={() => sleepPlayer.toggleBlackScreen(true)}
-          onClose={() => setShowPlayerModal(false)}
+          onClose={handleClosePlayer}
         />
       )}
 

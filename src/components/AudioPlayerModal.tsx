@@ -71,44 +71,59 @@ export const AudioPlayerModal: React.FC<AudioPlayerModalProps> = ({
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   // Render Persistent Bottom Mini-Player if collapsed
+  // Render Persistent Bottom Mini-Player if collapsed
   if (!isExpanded) {
     return (
       <div
         className="glass-panel"
         style={{
           position: 'fixed',
-          bottom: '16px',
-          left: '16px',
-          right: '16px',
-          padding: '12px 18px',
+          bottom: '12px',
+          left: '12px',
+          right: '12px',
+          padding: '10px 14px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           zIndex: 40,
           boxShadow: '0 10px 40px rgba(0, 0, 0, 0.6)',
           cursor: 'pointer',
+          gap: '10px',
         }}
         onClick={() => setIsExpanded(true)}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <span style={{ fontSize: '28px' }}>{story.characterEmoji}</span>
-          <div>
-            <h4 style={{ fontSize: '1rem', color: '#fff', marginBottom: '2px' }}>{story.title}</h4>
-            <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0, flex: 1 }}>
+          <span style={{ fontSize: '26px', flexShrink: 0 }}>{story.characterEmoji}</span>
+          <div style={{ minWidth: 0, flex: 1 }}>
+            <h4
+              style={{
+                fontSize: '0.92rem',
+                color: '#fff',
+                marginBottom: '2px',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {story.title}
+            </h4>
+            <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {formatTime(currentTime)} / {formatTime(duration)} • {ambientType !== 'none' ? `🎵 ${ambientType}` : 'Voice only'}
             </span>
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
           <button
+            type="button"
             onClick={(e) => {
               e.stopPropagation();
               onTogglePlayPause();
             }}
+            aria-label={isPlaying ? 'Pause' : 'Play'}
             style={{
-              width: '40px',
-              height: '40px',
+              width: '38px',
+              height: '38px',
               borderRadius: '50%',
               background: '#fbbf24',
               border: 'none',
@@ -117,26 +132,58 @@ export const AudioPlayerModal: React.FC<AudioPlayerModalProps> = ({
               justifyContent: 'center',
               color: '#07051a',
               cursor: 'pointer',
+              flexShrink: 0,
             }}
           >
-            {isPlaying ? <Pause size={18} fill="#07051a" /> : <Play size={18} fill="#07051a" />}
+            {isPlaying ? <Pause size={18} fill="#07051a" /> : <Play size={18} fill="#07051a" style={{ marginLeft: '2px' }} />}
           </button>
 
           <button
+            type="button"
             onClick={(e) => {
               e.stopPropagation();
               setIsExpanded(true);
             }}
+            aria-label="Expand player"
             style={{
-              background: 'transparent',
-              border: 'none',
+              width: '34px',
+              height: '34px',
+              borderRadius: '50%',
+              background: 'rgba(255, 255, 255, 0.08)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              color: '#cbd5e1',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}
+          >
+            <ChevronUp size={18} />
+          </button>
+
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onClose();
+            }}
+            aria-label="Stop and close player"
+            style={{
+              width: '34px',
+              height: '34px',
+              borderRadius: '50%',
+              background: 'rgba(255, 255, 255, 0.08)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
               color: '#94a3b8',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
             }}
           >
-            <ChevronUp size={22} />
+            <X size={16} />
           </button>
         </div>
       </div>
@@ -149,7 +196,7 @@ export const AudioPlayerModal: React.FC<AudioPlayerModalProps> = ({
       style={{
         position: 'fixed',
         inset: 0,
-        backgroundColor: 'rgba(7, 5, 26, 0.92)',
+        backgroundColor: 'rgba(7, 5, 26, 0.94)',
         backdropFilter: 'blur(24px)',
         zIndex: 50,
         display: 'flex',
@@ -157,48 +204,91 @@ export const AudioPlayerModal: React.FC<AudioPlayerModalProps> = ({
         alignItems: 'center',
         justifyContent: 'flex-start',
         overflowY: 'auto',
-        padding: '24px 16px',
+        padding: '16px 14px',
+      }}
+      onClick={(e) => {
+        // Tapping backdrop minimizes or dismisses
+        if (e.target === e.currentTarget) {
+          setIsExpanded(false);
+        }
       }}
     >
-      <div style={{ width: '100%', maxWidth: '580px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        {/* Top Bar */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+      <div style={{ width: '100%', maxWidth: '580px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
+        {/* Top Bar with Clear Sizing & Non-Overlapping Touch Targets */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', gap: '10px' }}>
           <button
+            type="button"
             onClick={() => setIsExpanded(false)}
             className="glass-pill"
-            style={{ padding: '8px 14px', display: 'flex', alignItems: 'center', gap: '6px', color: '#cbd5e1', cursor: 'pointer', fontSize: '0.85rem' }}
+            style={{
+              padding: '7px 12px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              color: '#cbd5e1',
+              cursor: 'pointer',
+              fontSize: '0.82rem',
+              flexShrink: 0,
+            }}
           >
-            <ChevronDown size={18} />
+            <ChevronDown size={17} />
             <span>Minimize</span>
           </button>
 
-          <span style={{ fontSize: '0.85rem', color: '#fbbf24', fontWeight: 600 }}>
-            {timerMinutesRemaining !== null ? `⏱ Sleep Timer: ${timerMinutesRemaining}m left` : '🌙 Bedtime Listening'}
+          <span
+            style={{
+              fontSize: '0.82rem',
+              color: '#fbbf24',
+              fontWeight: 600,
+              textAlign: 'center',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              flex: 1,
+              minWidth: 0,
+            }}
+          >
+            {timerMinutesRemaining !== null ? `⏱ ${timerMinutesRemaining}m left` : '🌙 Bedtime Listening'}
           </span>
 
           <button
+            type="button"
             onClick={onClose}
-            style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '6px' }}
+            aria-label="Close player"
+            style={{
+              width: '38px',
+              height: '38px',
+              borderRadius: '50%',
+              background: 'rgba(255, 255, 255, 0.1)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              color: '#cbd5e1',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+              zIndex: 10,
+            }}
           >
-            <X size={24} />
+            <X size={20} />
           </button>
         </div>
 
         {/* Character Sleep Emblem */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignSelf: 'center', alignItems: 'center', margin: '10px 0' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignSelf: 'center', alignItems: 'center', margin: '4px 0' }}>
           <div
             className="animate-moon-pulse"
             style={{
-              width: '130px',
-              height: '130px',
-              borderRadius: '40px',
+              width: '110px',
+              height: '110px',
+              borderRadius: '35px',
               background: 'radial-gradient(circle at 35% 35%, rgba(251, 191, 36, 0.25), rgba(18, 12, 45, 0.8))',
               border: `2px solid ${story.themeColor}`,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '64px',
-              boxShadow: `0 0 50px ${story.themeColor}33`,
+              fontSize: '54px',
+              boxShadow: `0 0 40px ${story.themeColor}33`,
             }}
           >
             {story.characterEmoji}
