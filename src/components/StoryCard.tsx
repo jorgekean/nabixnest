@@ -21,13 +21,14 @@ export const StoryCard: React.FC<StoryCardProps> = ({
     <div
       className="glass-card-interactive"
       style={{
-        padding: '20px',
+        padding: '16px',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
         position: 'relative',
         overflow: 'hidden',
         borderLeft: `4px solid ${story.themeColor}`,
+        borderRadius: '18px',
       }}
     >
       {/* Background glow circle */}
@@ -36,56 +37,58 @@ export const StoryCard: React.FC<StoryCardProps> = ({
           position: 'absolute',
           top: '-30px',
           right: '-30px',
-          width: '120px',
-          height: '120px',
+          width: '100px',
+          height: '100px',
           borderRadius: '50%',
           background: story.themeColor,
           opacity: 0.12,
-          filter: 'blur(30px)',
+          filter: 'blur(28px)',
           pointerEvents: 'none',
         }}
       />
 
       {/* Top Header */}
       <div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
           {/* Character Emoji Emblem */}
           <div
             style={{
-              width: '56px',
-              height: '56px',
-              borderRadius: '18px',
+              width: '46px',
+              height: '46px',
+              borderRadius: '14px',
               background: 'rgba(255, 255, 255, 0.08)',
               border: `1px solid ${story.themeColor}55`,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '28px',
-              boxShadow: `0 4px 16px ${story.themeColor}25`,
+              fontSize: '24px',
+              boxShadow: `0 4px 14px ${story.themeColor}25`,
+              flexShrink: 0,
             }}
           >
             {story.characterEmoji}
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             {/* Duration pill */}
             <span
               className="glass-pill"
               style={{
-                fontSize: '0.75rem',
+                fontSize: '0.72rem',
                 color: '#cbd5e1',
-                padding: '4px 10px',
+                padding: '3px 8px',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '4px',
+                gap: '3px',
               }}
             >
-              <Clock size={12} />
+              <Clock size={11} />
               {story.durationMinutes}m
             </span>
 
             {/* Favorite Button */}
             <button
+              type="button"
               onClick={(e) => {
                 e.stopPropagation();
                 onToggleFavorite(story.id);
@@ -102,69 +105,112 @@ export const StoryCard: React.FC<StoryCardProps> = ({
               }}
               title={isFavorite ? 'Remove from favorites' : 'Add to favorite bedtime list'}
             >
-              <Star size={18} fill={isFavorite ? '#fbbf24' : 'none'} />
+              <Star size={16} fill={isFavorite ? '#fbbf24' : 'none'} />
             </button>
           </div>
         </div>
 
-        {/* Title & Tagline */}
+        {/* Title (capped to 2 lines max with refined readable font) */}
         <h3
           style={{
-            fontSize: '1.25rem',
+            fontSize: '1.05rem',
             color: '#ffffff',
-            marginBottom: '6px',
-            lineHeight: 1.25,
+            marginBottom: '4px',
+            lineHeight: 1.3,
+            fontWeight: 600,
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
           }}
         >
           {story.title}
         </h3>
-        <p style={{ fontSize: '0.88rem', color: story.themeColor, fontWeight: 500, marginBottom: '10px' }}>
+
+        {/* Tagline (single line teaser) */}
+        <p
+          style={{
+            fontSize: '0.76rem',
+            color: story.themeColor,
+            fontWeight: 500,
+            marginBottom: '8px',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
           {story.tagline}
         </p>
-        <p style={{ fontSize: '0.82rem', color: '#94a3b8', lineHeight: 1.45, marginBottom: '16px' }}>
+
+        {/* Synopsis (strictly 2 lines max, never shows full story text on the card) */}
+        <p
+          style={{
+            fontSize: '0.78rem',
+            color: '#94a3b8',
+            lineHeight: 1.45,
+            marginBottom: '12px',
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+          }}
+        >
           {story.synopsis}
         </p>
       </div>
 
       {/* Footer & Play Button */}
       <div>
-        <div style={{ fontSize: '0.74rem', color: '#cbd5e1', background: 'rgba(255, 255, 255, 0.05)', padding: '6px 12px', borderRadius: '10px', marginBottom: '16px' }}>
+        <div
+          style={{
+            fontSize: '0.7rem',
+            color: '#cbd5e1',
+            background: 'rgba(255, 255, 255, 0.05)',
+            padding: '5px 10px',
+            borderRadius: '10px',
+            marginBottom: '12px',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
           💡 <span style={{ color: '#fde68a' }}>Milestone:</span> {story.learningMilestone}
         </div>
 
         <button
+          type="button"
           onClick={() => onSelectStory(story)}
           style={{
             width: '100%',
-            padding: '12px 18px',
-            borderRadius: '16px',
+            padding: '10px 14px',
+            borderRadius: '14px',
             border: 'none',
             background: isCurrentlyPlaying
               ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)'
               : 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
             color: '#07051a',
             fontWeight: 700,
-            fontSize: '0.95rem',
+            fontSize: '0.85rem',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '8px',
+            gap: '6px',
             cursor: 'pointer',
             boxShadow: isCurrentlyPlaying
-              ? '0 6px 20px rgba(16, 185, 129, 0.4)'
-              : '0 6px 20px rgba(251, 191, 36, 0.35)',
+              ? '0 6px 18px rgba(16, 185, 129, 0.35)'
+              : '0 6px 18px rgba(251, 191, 36, 0.3)',
             transition: 'transform 0.15s ease',
           }}
         >
           {isCurrentlyPlaying ? (
             <>
-              <Pause size={18} fill="#07051a" />
-              <span>Playing Bedtime Story...</span>
+              <Pause size={16} fill="#07051a" />
+              <span>Playing...</span>
             </>
           ) : (
             <>
-              <Play size={18} fill="#07051a" />
-              <span>Listen Now ({story.durationMinutes} min)</span>
+              <Play size={16} fill="#07051a" />
+              <span>Listen Now ({story.durationMinutes}m)</span>
             </>
           )}
         </button>

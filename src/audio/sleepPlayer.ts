@@ -1,6 +1,7 @@
 import { ambientSoundscape } from './ambientSynth';
 import type { AmbientType } from './ambientSynth';
 import type { Story } from '../data/stories';
+import { bedtimeSpeechNarrator } from './speechNarrator';
 
 export interface PlayerState {
   isPlaying: boolean;
@@ -40,33 +41,41 @@ export class SleepPlayerController {
     this.setupAudioListeners();
   }
 
+  private isCustomStory(story: Story | null): boolean {
+    if (!story) return false;
+    return story.id.startsWith('custom-') || story.audioUrl === 'tts:custom';
+  }
+
   private setupAudioListeners() {
     if (!this.audio) return;
 
     this.audio.addEventListener('timeupdate', () => {
-      if (!this.audio) return;
+      if (!this.audio || this.isCustomStory(this.state.currentStory)) return;
       this.state.currentTime = this.audio.currentTime;
       this.state.duration = this.audio.duration || 0;
       this.notify();
     });
 
     this.audio.addEventListener('loadedmetadata', () => {
-      if (!this.audio) return;
+      if (!this.audio || this.isCustomStory(this.state.currentStory)) return;
       this.state.duration = this.audio.duration || 0;
       this.notify();
     });
 
     this.audio.addEventListener('ended', () => {
+      if (this.isCustomStory(this.state.currentStory)) return;
       this.state.isPlaying = false;
       this.notify();
     });
 
     this.audio.addEventListener('play', () => {
+      if (this.isCustomStory(this.state.currentStory)) return;
       this.state.isPlaying = true;
       this.notify();
     });
 
     this.audio.addEventListener('pause', () => {
+      if (this.isCustomStory(this.state.currentStory)) return;
       this.state.isPlaying = false;
       this.notify();
     });
@@ -83,10 +92,50 @@ export class SleepPlayerController {
   }
 
   public async playStory(story: Story) {
+    this.state.currentStory = story;
+
+    // Check if this is a custom generated story
+    if (this.isCustomStory(story)) {
+      // Pause HTML5 audio
+      if (this.audio) {
+        this.audio.pause();
+        this.audio.currentTime = 0;
+      }
+
+      // Narrate with real custom text using bedtime speech synthesis
+      bedtimeSpeechNarrator.speak(story.fullText, this.state.voiceVolume, {
+        onStart: () => {
+          this.state.isPlaying = true;
+          this.state.duration = bedtimeSpeechNarrator.getDuration();
+          this.notify();
+        },
+        onTimeUpdate: (cur, dur) => {
+          this.state.currentTime = cur;
+          this.state.duration = dur;
+          this.notify();
+        },
+        onEnd: () => {
+          this.state.isPlaying = false;
+          this.notify();
+        },
+      });
+
+      this.state.isPlaying = true;
+
+      // Start ambient background soundscape
+      if (this.state.ambientType !== 'none') {
+        ambientSoundscape.play(this.state.ambientType);
+        ambientSoundscape.setVolume(this.state.ambientVolume);
+      }
+      this.notify();
+      return;
+    }
+
+    // Standard Studio Pack story (HTML5 audio)
+    bedtimeSpeechNarrator.stop();
     if (!this.audio) return;
 
-    if (this.state.currentStory?.id !== story.id) {
-      this.state.currentStory = story;
+    if (this.audio.src !== window.location.origin + story.audioUrl && !this.audio.src.endsWith(story.audioUrl)) {
       this.audio.src = story.audioUrl;
       this.audio.volume = this.state.voiceVolume;
       this.audio.currentTime = 0;
@@ -108,7 +157,9 @@ export class SleepPlayerController {
   }
 
   public pause() {
-    if (this.audio) {
+    if (this.isCustomStory(this.state.currentStory)) {
+      bedtimeSpeechNarrator.pause();
+    } else if (this.audio) {
       this.audio.pause();
     }
     this.state.isPlaying = false;
@@ -116,7 +167,12 @@ export class SleepPlayerController {
   }
 
   public resume() {
-    if (this.audio && this.state.currentStory) {
+    if (!this.state.currentStory) return;
+
+    if (this.isCustomStory(this.state.currentStory)) {
+      bedtimeSpeechNarrator.resume();
+      this.state.isPlaying = true;
+    } else if (this.audio) {
       this.audio.play().catch(console.warn);
       this.state.isPlaying = true;
     }
@@ -132,6 +188,13 @@ export class SleepPlayerController {
   }
 
   public seek(seconds: number) {
+    if (this.isCustomStory(this.state.currentStory)) {
+      // Custom stories estimate progress
+      this.state.currentTime = Math.max(0, Math.min(seconds, this.state.duration));
+      this.notify();
+      return;
+    }
+
     if (!this.audio) return;
     this.audio.currentTime = Math.max(0, Math.min(seconds, this.audio.duration || 0));
     this.state.currentTime = this.audio.currentTime;
@@ -139,6 +202,10 @@ export class SleepPlayerController {
   }
 
   public seekRelative(deltaSeconds: number) {
+    if (this.isCustomStory(this.state.currentStory)) {
+      this.seek(this.state.currentTime + deltaSeconds);
+      return;
+    }
     if (!this.audio) return;
     this.seek(this.audio.currentTime + deltaSeconds);
   }
@@ -148,6 +215,7 @@ export class SleepPlayerController {
     if (this.audio) {
       this.audio.volume = this.state.voiceVolume;
     }
+    bedtimeSpeechNarrator.setVolume(this.state.voiceVolume);
     this.notify();
   }
 
@@ -191,6 +259,7 @@ export class SleepPlayerController {
         if (this.audio) {
           this.audio.volume = this.state.voiceVolume * fadeRatio;
         }
+        bedtimeSpeechNarrator.setVolume(this.state.voiceVolume * fadeRatio);
         ambientSoundscape.setVolume(this.state.ambientVolume * fadeRatio);
       }
 
@@ -212,6 +281,7 @@ export class SleepPlayerController {
   }
 
   public stopAll() {
+    bedtimeSpeechNarrator.stop();
     if (this.audio) {
       this.audio.pause();
       this.audio.currentTime = 0;
@@ -227,3 +297,4 @@ export class SleepPlayerController {
 }
 
 export const sleepPlayer = new SleepPlayerController();
+

@@ -15,14 +15,14 @@ export function weaveBedtimeStory(params: StoryGenerationParams): {
 } {
   const name = params.childName.trim() || 'Little Star';
   const rawTopic = params.topic.trim() || 'a gentle journey through starry dreamland';
-  // Capitalize first letter of topic
   const topic = rawTopic.charAt(0).toLowerCase() + rawTopic.slice(1);
   const companion = params.companionName || 'Cozy Bear';
   const emoji = params.companionEmoji || '⭐';
+  const shortSubject = extractShortSubject(rawTopic);
 
-  const title = `${name}’s Dream: ${capitalizeWords(rawTopic)}`;
-  const tagline = `A sleepy bedtime adventure through ${topic}`;
-  const synopsis = `Tonight, ${name} and ${companion} embark on a soothing, quiet voyage through ${topic}, practicing calm bedtime breathing and drifting peacefully to sleep.`;
+  const title = `${name} & ${shortSubject}`;
+  const tagline = `A gentle bedtime journey with ${companion}`;
+  const synopsis = `Tonight, ${name} and ${companion} embark on a calm, dreamy adventure through ${shortSubject.toLowerCase()}, letting go of daytime worries and drifting peacefully to sleep.`;
 
   // Dynamic bedtime text with hypnotic soothing pauses and pediatric wind-down sequence
   const fullText = `Tonight... the velvet evening sky was dusted with millions of quiet, twinkling stars. 
@@ -63,6 +63,26 @@ Goodnight, ${companion}... Goodnight, starry world... Goodnight, sweet ${name}.`
     synopsis,
     fullText,
   };
+}
+
+function extractShortSubject(rawTopic: string): string {
+  const lower = rawTopic.toLowerCase();
+  if (lower.includes('dino')) return 'The Sleepy Dinosaur';
+  if (lower.includes('space') || lower.includes('spaceship')) return 'The Starlight Spaceship';
+  if (lower.includes('train')) return 'The Cloud Train';
+  if (lower.includes('turtle')) return 'The Ocean Turtle';
+  if (lower.includes('castle')) return 'The Cloud Castle';
+  if (lower.includes('dragon')) return 'The Friendly Dragon';
+  if (lower.includes('unicorn')) return 'The Starlight Unicorn';
+  if (lower.includes('forest') || lower.includes('woods')) return 'The Whispering Forest';
+
+  // Fallback: pick first 2-3 meaningful words
+  const words = rawTopic
+    .replace(/^(a|an|the|about)\s+/i, '')
+    .split(/\s+/)
+    .slice(0, 3)
+    .join(' ');
+  return capitalizeWords(words || 'The Starlit Journey');
 }
 
 function capitalizeWords(str: string): string {

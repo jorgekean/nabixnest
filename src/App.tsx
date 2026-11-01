@@ -45,14 +45,21 @@ export function App() {
     };
   }, []);
 
-  // Load custom saved stories
+  // Load custom saved stories (with automatic migration to tts:custom narration)
   useEffect(() => {
     try {
       const customSaved = localStorage.getItem('bedtimenest_custom_stories');
       if (customSaved) {
         const parsed = JSON.parse(customSaved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          setStories([...BEDTIME_STORIES, ...parsed]);
+          const migrated: Story[] = parsed.map((s: Story) => {
+            if (s.id.startsWith('custom-') && (!s.audioUrl || s.audioUrl.includes('barnaby-bear'))) {
+              return { ...s, audioUrl: 'tts:custom' };
+            }
+            return s;
+          });
+          localStorage.setItem('bedtimenest_custom_stories', JSON.stringify(migrated));
+          setStories([...BEDTIME_STORIES, ...migrated]);
         }
       }
     } catch {

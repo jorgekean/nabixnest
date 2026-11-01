@@ -64,7 +64,7 @@ export const CustomStoryCreatorModal: React.FC<CustomStoryCreatorModalProps> = (
       character: char.name,
       characterEmoji: char.emoji,
       durationMinutes: 4,
-      audioUrl: '/audio/stories/barnaby-bear.mp3', // Uses studio soothing bedtime narration fallback
+      audioUrl: 'tts:custom', // Triggers live bedtime speech synthesis of the custom story
       theme: th.title,
       themeColor: char.color,
       tagline: woven.tagline,
