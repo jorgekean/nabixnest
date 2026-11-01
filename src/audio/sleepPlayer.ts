@@ -135,8 +135,13 @@ export class SleepPlayerController {
     bedtimeSpeechNarrator.stop();
     if (!this.audio) return;
 
-    if (this.audio.src !== window.location.origin + story.audioUrl && !this.audio.src.endsWith(story.audioUrl)) {
-      this.audio.src = story.audioUrl;
+    const baseUrl = import.meta.env.BASE_URL || '/';
+    const cleanBase = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
+    const cleanAudio = story.audioUrl.startsWith('/') ? story.audioUrl.slice(1) : story.audioUrl;
+    const resolvedUrl = story.audioUrl.startsWith('http') ? story.audioUrl : `${cleanBase}${cleanAudio}`;
+
+    if (!this.audio.src.endsWith(cleanAudio)) {
+      this.audio.src = resolvedUrl;
       this.audio.volume = this.state.voiceVolume;
       this.audio.currentTime = 0;
     }
