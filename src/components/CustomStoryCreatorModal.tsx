@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { X, Sparkles, Heart, Lightbulb } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Sparkles, Heart, Lightbulb, Volume2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import type { Story } from '../data/stories';
 import { weaveBedtimeStory } from '../utils/storyGenerator';
+import { bedtimeSpeechNarrator } from '../audio/speechNarrator';
 
 interface CustomStoryCreatorModalProps {
   onClose: () => void;
@@ -19,6 +20,42 @@ export const CustomStoryCreatorModal: React.FC<CustomStoryCreatorModalProps> = (
   const [theme, setTheme] = useState<string>('Calming a busy body');
   const [isGenerated, setIsGenerated] = useState<boolean>(false);
   const [generatedStory, setGeneratedStory] = useState<Story | null>(null);
+  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const [selectedVoiceURI, setSelectedVoiceURI] = useState<string>('');
+  const [isPlayingPreview, setIsPlayingPreview] = useState<boolean>(false);
+
+  useEffect(() => {
+    const updateVoices = () => {
+      const voices = bedtimeSpeechNarrator.getAvailableVoices();
+      setAvailableVoices(voices);
+      const best = bedtimeSpeechNarrator.getBestBedtimeVoice();
+      if (best) {
+        setSelectedVoiceURI(best.voiceURI);
+      }
+    };
+
+    updateVoices();
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = updateVoices;
+    }
+  }, []);
+
+  const handlePreviewVoice = (voiceURI: string) => {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    setIsPlayingPreview(true);
+
+    const sample = new SpeechSynthesisUtterance("Goodnight, little dreamer... close your eyes and rest softly.");
+    sample.rate = 0.76;
+    sample.pitch = 0.94;
+    const voice = availableVoices.find(v => v.voiceURI === voiceURI);
+    if (voice) sample.voice = voice;
+
+    sample.onend = () => setIsPlayingPreview(false);
+    sample.onerror = () => setIsPlayingPreview(false);
+
+    window.speechSynthesis.speak(sample);
+  };
 
   const characters = [
     { name: 'Cozy Bear', emoji: '🐻', color: '#f59e0b' },
@@ -311,6 +348,64 @@ export const CustomStoryCreatorModal: React.FC<CustomStoryCreatorModalProps> = (
                 })}
               </div>
             </div>
+
+            {/* Bedtime Narrator Voice Selector */}
+            {availableVoices.length > 0 && (
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+                  <label style={{ fontSize: '0.85rem', color: '#e2e8f0', fontWeight: 600 }}>
+                    Bedtime Narrator Voice
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => handlePreviewVoice(selectedVoiceURI)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      background: 'none',
+                      border: 'none',
+                      color: isPlayingPreview ? '#fbbf24' : '#38bdf8',
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      padding: '2px 6px',
+                    }}
+                  >
+                    <Volume2 size={13} />
+                    <span>{isPlayingPreview ? 'Listening...' : 'Preview Voice'}</span>
+                  </button>
+                </div>
+
+                <select
+                  value={selectedVoiceURI}
+                  onChange={(e) => {
+                    setSelectedVoiceURI(e.target.value);
+                    bedtimeSpeechNarrator.setSelectedVoice(e.target.value);
+                  }}
+                  style={{
+                    width: '100%',
+                    padding: '10px 14px',
+                    borderRadius: '12px',
+                    background: 'rgba(255, 255, 255, 0.08)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    color: '#ffffff',
+                    fontSize: '0.84rem',
+                    outline: 'none',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {availableVoices.slice(0, 12).map((v) => (
+                    <option key={v.voiceURI} value={v.voiceURI} style={{ background: '#0f0a28', color: '#ffffff' }}>
+                      {v.name} ({v.lang}) {!v.localService ? '✨ Natural' : ''}
+                    </option>
+                  ))}
+                </select>
+                <span style={{ fontSize: '0.7rem', color: '#94a3b8', display: 'block', marginTop: '4px' }}>
+                  Select the warmest, softest voice available on your device.
+                </span>
+              </div>
+            )}
 
             <button
               type="submit"
