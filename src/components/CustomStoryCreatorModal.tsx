@@ -38,20 +38,20 @@ export const CustomStoryCreatorModal: React.FC<CustomStoryCreatorModalProps> = (
     const char = characters.find(c => c.name === character) || characters[0];
     const th = themes.find(t => t.title === theme) || themes[0];
 
-    const customText = `Tonight, the silver stars twinkled especially bright right over ${name}'s cozy bedroom window. 
+    const customText = `Tonight... the silver stars twinkled especially bright right over ${name}'s cozy bedroom window. 
 Far away in the Whispering Woods, ${char.name} was also getting ready for bed. 
 
-"${name} had such a big, adventurous day," said Mama softly, smoothing the blankets over ${name}'s warm shoulders. 
-"And just like ${char.name}, your body has done so much climbing, running, and learning today."
+"${name} had such a big, adventurous day," whispered Mama softly... smoothing the blankets over ${name}'s warm shoulders. 
+"And just like ${char.name}... your body has done so much climbing, running, and learning today."
 
-${char.name} tucked in beside the warm moss, taking a slow, deep breath in... one, two, three... and letting out a gentle evening sigh... four, five, six. 
+${char.name} tucked in beside the warm moss... taking a slow, deep breath in... one... two... three... and letting out a gentle evening sigh... four... five... six. 
 ${name} did the exact same breath. 
 In went the calm starlight... out went all the busy wiggles.
 
-"Whenever you close your eyes, ${name}," whispered the gentle night breeze, "you are warm, you are loved, and you are safe."
+"Whenever you close your eyes, ${name}," whispered the gentle night breeze... "you are warm... you are loved... and you are completely safe."
 The room was quiet and peaceful. 
-${name}'s eyelids grew heavy, like soft velvet curtains. 
-Goodnight, ${char.name}. Goodnight, world. Sweet dreams, precious ${name}.`;
+${name}'s eyelids grew heavy... like soft velvet curtains. 
+Goodnight, ${char.name}... Goodnight, world... Sweet dreams, precious ${name}.`;
 
     const newStory: Story = {
       id: `custom-${Date.now()}`,
