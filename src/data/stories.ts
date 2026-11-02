@@ -26,13 +26,27 @@ export const BEDTIME_STORIES: Story[] = [
     tagline: 'Learning sleepy bear belly breathing',
     synopsis: 'Barnaby had a busy day of tumbling and playing. When his little mind is still buzzing, Mama Bear teaches him the sleepy bear breath to help his heavy paws sink into the moss.',
     learningMilestone: 'Nervous system down-regulation & deep diaphragmatic breathing',
-    fullText: `Once upon a quiet evening... deep in the Whispering Woods... lived a little bear named Barnaby. Barnaby had spent the entire sunny afternoon tumbling through wildflower fields... and chasing golden bumblebees. His little paws were tired... but his mind was still buzzing like a tiny drum.
+    fullText: `Once upon a quiet, starry evening—deep in the heart of the Whispering Woods—lived a little brown bear named Barnaby.
 
-"Come sit with me by the hollow oak..." whispered Mama Bear softly. Barnaby waddled over... resting his heavy chin right on Mama's warm, fluffy shoulder. The evening sky was turning from violet... to deep... velvet indigo. The stars were beginning to blink awake, one by one... like tiny lanterns in the night.
+Barnaby had spent the long afternoon tumbling through fields of sweet clover, chasing golden dragonflies, and splashing in the cool mountain brook. Now, his little paws felt heavy—like warm river stones resting in the sun. But inside his head, his busy thoughts were still buzzing, like tiny golden bees.
 
-"Let's practice our sleepy bear breath," Mama whispered. "Breathe in the sweet pine needles... one... two... three... and gently blow out, like a quiet evening breeze... one... two... three... four." Barnaby took a deep, slow breath. His little round tummy rose up... and sank gently down.
+"Come sit with me by the ancient hollow oak," whispered Mama Bear softly, her voice as warm and comforting as a bowl of sweet honey.
 
-He listened to the dry autumn leaves rustling above them... singing a soft hush-a-bye song. With every breath... his paws felt heavier... and warmer... sinking softly into the cool green moss. "You are safe, little bear," Mama murmured... wrapping her big gentle arm around him. "The woods are resting... the stars are watching... and it is time to dream." Barnaby closed his eyes... let out one long, happy yawn... and drifted into deep... peaceful sleep.`
+Barnaby waddled over on his sleepy paws, resting his chin right against Mama's warm, fluffy shoulder. Above them, the sky was slowly turning from gentle lavender... to a deep, peaceful indigo. High above the whispering branches, tiny silver stars began to blink awake—one by one—like cozy nightlights in the sky.
+
+"Do you feel your busy thoughts, little one?" Mama asked tenderly, brushing a stray pine needle from his ear.
+
+"Yes, Mama," whispered Barnaby with a soft, tired sigh. "My legs want to rest... but my heart is still playing."
+
+"That is okay, my sweet bear," Mama murmured, wrapping her big, protective arms all the way around him. "Let us practice our sleepy bear breath together. Close your eyes... feel how soft the green moss is beneath you... and breathe in slowly with me... one... two... three... and gently sigh it all out into the night... one... two... three... four."
+
+Barnaby took a long, gentle breath. In... and out. His soft, round tummy rose up... and slowly melted down.
+
+With every quiet breath, his shoulders relaxed. His paws grew warm and heavy. All around them, the gentle night crickets hummed a soft, rhythmic lullaby.
+
+"You did so much today," Mama whispered into his ear. "And now—you have nothing left to do. The whole forest is resting with you. You are completely safe... and deeply loved."
+
+Barnaby let out one long, happy, sleepy yawn. He nestled deeper into Mama's warm fur... closed his heavy eyes... and drifted gently into a peaceful, starry dream.`
   },
   {
     id: 'luna-owl',
