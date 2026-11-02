@@ -14,10 +14,12 @@ import {
   ChevronUp, 
   ChevronDown, 
   Timer, 
-  BookOpen 
+  BookOpen,
+  Sparkles
 } from 'lucide-react';
 import type { Story } from '../data/stories';
 import type { AmbientType } from '../audio/ambientSynth';
+import { StoryAnimationScene } from './animations/StoryAnimationScene';
 
 interface AudioPlayerModalProps {
   story: Story;
@@ -64,6 +66,7 @@ export const AudioPlayerModal: React.FC<AudioPlayerModalProps> = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const [showFullScript, setShowFullScript] = useState<boolean>(false);
+  const [viewMode, setViewMode] = useState<'animated' | 'minimal'>('animated');
 
   const formatTime = (seconds: number) => {
     if (isNaN(seconds)) return '0:00';
@@ -278,29 +281,91 @@ export const AudioPlayerModal: React.FC<AudioPlayerModalProps> = ({
           </button>
         </div>
 
-        {/* Character Sleep Emblem */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignSelf: 'center', alignItems: 'center', margin: '4px 0' }}>
+        {/* Character Sleep Emblem / Animated Bedtime Scene */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignSelf: 'center', alignItems: 'center', width: '100%', margin: '4px 0' }}>
+          {/* Subtle View Mode Toggle */}
           <div
-            className="animate-moon-pulse"
             style={{
-              width: '110px',
-              height: '110px',
-              borderRadius: '35px',
-              background: 'radial-gradient(circle at 35% 35%, rgba(251, 191, 36, 0.25), rgba(18, 12, 45, 0.8))',
-              border: `2px solid ${story.themeColor}`,
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '54px',
-              boxShadow: `0 0 40px ${story.themeColor}33`,
+              gap: '4px',
+              padding: '3px 4px',
+              borderRadius: '999px',
+              backgroundColor: 'rgba(255, 255, 255, 0.06)',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              marginBottom: '10px',
             }}
           >
-            {story.characterEmoji}
+            <button
+              type="button"
+              onClick={() => setViewMode('animated')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px',
+                padding: '4px 12px',
+                borderRadius: '999px',
+                fontSize: '0.74rem',
+                fontWeight: viewMode === 'animated' ? 600 : 400,
+                color: viewMode === 'animated' ? '#07051a' : '#94a3b8',
+                backgroundColor: viewMode === 'animated' ? '#fbbf24' : 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <Sparkles size={12} />
+              <span>Animated Scene</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('minimal')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px',
+                padding: '4px 12px',
+                borderRadius: '999px',
+                fontSize: '0.74rem',
+                fontWeight: viewMode === 'minimal' ? 600 : 400,
+                color: viewMode === 'minimal' ? '#07051a' : '#94a3b8',
+                backgroundColor: viewMode === 'minimal' ? '#fbbf24' : 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <Moon size={12} />
+              <span>Low-Stim Glow</span>
+            </button>
           </div>
-          <h2 style={{ fontSize: '1.6rem', color: '#ffffff', textAlign: 'center', marginTop: '16px', lineHeight: 1.2 }}>
+
+          {viewMode === 'animated' ? (
+            <StoryAnimationScene story={story} isPlaying={isPlaying} />
+          ) : (
+            <div
+              className="animate-moon-pulse"
+              style={{
+                width: '110px',
+                height: '110px',
+                borderRadius: '35px',
+                background: 'radial-gradient(circle at 35% 35%, rgba(251, 191, 36, 0.25), rgba(18, 12, 45, 0.8))',
+                border: `2px solid ${story.themeColor}`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '54px',
+                boxShadow: `0 0 40px ${story.themeColor}33`,
+              }}
+            >
+              {story.characterEmoji}
+            </div>
+          )}
+
+          <h2 style={{ fontSize: '1.45rem', color: '#ffffff', textAlign: 'center', marginTop: '14px', lineHeight: 1.2 }}>
             {story.title}
           </h2>
-          <span style={{ fontSize: '0.9rem', color: story.themeColor, fontWeight: 500, marginTop: '4px' }}>
+          <span style={{ fontSize: '0.88rem', color: story.themeColor, fontWeight: 500, marginTop: '4px' }}>
             {story.tagline}
           </span>
         </div>

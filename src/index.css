@@ -208,3 +208,159 @@ button, [role="button"] {
     padding: 16px 12px !important;
   }
 }
+
+/* ================= BEDTIME STORY ANIMATIONS ================= */
+@keyframes barnabyBreathe {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-2.5px) scale(1.02);
+  }
+}
+
+@keyframes bellyExpand {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08, 1.05);
+  }
+}
+
+@keyframes leafSway {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+}
+
+@keyframes fireflyFloat1 {
+  0%, 100% {
+    transform: translate(0, 0);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(6px, -12px);
+    opacity: 1;
+  }
+}
+
+@keyframes fireflyFloat2 {
+  0%, 100% {
+    transform: translate(0, 0);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(-8px, -14px);
+    opacity: 1;
+  }
+}
+
+@keyframes fireflyFloat3 {
+  0%, 100% {
+    transform: translate(0, 0);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(5px, 8px);
+    opacity: 0.95;
+  }
+}
+
+@keyframes starTwinkle1 {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes starTwinkle2 {
+  0%, 100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 0.2;
+  }
+}
+
+@keyframes starTwinkle3 {
+  0%, 100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes sleepPulse {
+  0%, 100% {
+    transform: scale(0.96);
+    opacity: 0.25;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.55;
+  }
+}
+
+@keyframes gentleFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.animate-barnaby-breathe {
+  animation: barnabyBreathe 4.5s ease-in-out infinite;
+}
+
+.animate-belly-expand {
+  animation: bellyExpand 4.5s ease-in-out infinite;
+}
+
+.animate-leaf-sway {
+  animation: leafSway 6s ease-in-out infinite;
+  transform-origin: 20px 80px;
+}
+
+.animate-firefly-1 {
+  animation: fireflyFloat1 5s ease-in-out infinite;
+}
+
+.animate-firefly-2 {
+  animation: fireflyFloat2 6.5s ease-in-out infinite;
+}
+
+.animate-firefly-3 {
+  animation: fireflyFloat3 4.2s ease-in-out infinite;
+}
+
+.animate-star-twinkle-1 {
+  animation: starTwinkle1 3s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.animate-star-twinkle-2 {
+  animation: starTwinkle2 4.2s ease-in-out infinite;
+}
+
+.animate-star-twinkle-3 {
+  animation: starTwinkle3 5s ease-in-out infinite;
+}
+
+.animate-sleep-pulse {
+  animation: sleepPulse 5s ease-in-out infinite;
+}
+
+.animate-gentle-float {
+  animation: gentleFloat 5s ease-in-out infinite;
+}
