@@ -341,7 +341,12 @@ export const AudioPlayerModal: React.FC<AudioPlayerModalProps> = ({
           </div>
 
           {viewMode === 'animated' ? (
-            <StoryAnimationScene story={story} isPlaying={isPlaying} />
+            <StoryAnimationScene
+              story={story}
+              isPlaying={isPlaying}
+              currentTime={currentTime}
+              duration={duration}
+            />
           ) : (
             <div
               className="animate-moon-pulse"
