@@ -10,9 +10,12 @@
 ## ✨ Features
 
 - **🌙 100% Screen-Free Philosophy**: Designed to settle young minds into sleep without blue light or stimulating visuals.
-- **🎙️ Studio Narration & Custom Story Engine**:
-  - Pre-recorded calming bedtime stories featuring lovable animal friends (Barnaby Bear, Luna Owl, Oliver Otter, Zuno Fox).
-  - Custom personalized bedtime story generator with soothing, slowed speech synthesis.
+- **🎙️ 19 Studio Neural Audio Stories**:
+  - Full library of 19 high-definition bedtime stories read with Microsoft Azure Neural AI (`JennyNeural`, `GuyNeural`, `AriaNeural`).
+  - Warm, comforting bedtime prosody tuned specifically for toddlers and young children.
+  - Lovable animal companions: *Barnaby Bear, Luna Owl, Oliver Otter, Zuno Fox, Daisy Dinosaur, Sammy Turtle, Benny Bunny, Pip Cloud Train, Clara Koala, Milo Monkey, Hazel Hedgehog, Toby Tugboat, Ella Elephant, Finn Firefly, Penny Penguin, Rory Red Panda, Rosie Deer, Leo Lion, and Kiki Kitten*.
+- **⏱️ Adjustable Voice Pacing**:
+  - Fine-tune narration speed: **`0.75x Slower`**, **`0.85x Gentle`**, **`1.0x Bedtime`**, **`1.15x Clear`**, or **`1.25x Brisk`** to match each child's listening preference.
 - **🌧️ Real-Time Procedural Soundscapes**:
   - Web Audio API ambient sound generator: Warm Rain, Ocean Waves, Night Forest Crickets, Soft Campfire, Gentle White Noise, or Quiet Lullaby.
 - **🎛️ Dual-Track Audio Mixer**:
@@ -21,8 +24,8 @@
   - Select 5, 15, 30, 45, or 60 minutes with gradual volume fade-out.
 - **🌑 Nightstand Mode**:
   - Deep black OLED-friendly screen mode with subtle amber glow for zero bedside disturbance.
-- **📱 Offline PWA Support**:
-  - Full Progressive Web App with offline service worker precaching. Works seamlessly in airplane mode or bedside without Wi-Fi.
+- **📱 100% Offline PWA**:
+  - Complete library precached by service worker. Works in airplane mode or bedside with zero internet/Wi-Fi needed.
 
 ---
 

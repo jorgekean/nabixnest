@@ -13,6 +13,7 @@ export interface PlayerState {
   ambientType: AmbientType;
   timerMinutesRemaining: number | null;
   isBlackScreen: boolean;
+  playbackRate: number;
 }
 
 export type StateListener = (state: PlayerState) => void;
@@ -29,6 +30,7 @@ export class SleepPlayerController {
     ambientType: 'rain',
     timerMinutesRemaining: null,
     isBlackScreen: false,
+    playbackRate: 1.0,
   };
 
   private listeners: Set<StateListener> = new Set();
@@ -143,11 +145,15 @@ export class SleepPlayerController {
     if (!this.audio.src.endsWith(cleanAudio)) {
       this.audio.src = resolvedUrl;
       this.audio.volume = this.state.voiceVolume;
+      this.audio.playbackRate = this.state.playbackRate;
       this.audio.currentTime = 0;
+    } else {
+      this.audio.playbackRate = this.state.playbackRate;
     }
 
     try {
       await this.audio.play();
+      this.audio.playbackRate = this.state.playbackRate;
       this.state.isPlaying = true;
 
       // Start default ambient sound if not playing
@@ -221,6 +227,15 @@ export class SleepPlayerController {
       this.audio.volume = this.state.voiceVolume;
     }
     bedtimeSpeechNarrator.setVolume(this.state.voiceVolume);
+    this.notify();
+  }
+
+  public setPlaybackRate(rate: number) {
+    const clamped = Math.max(0.6, Math.min(1.5, rate));
+    this.state.playbackRate = clamped;
+    if (this.audio) {
+      this.audio.playbackRate = clamped;
+    }
     this.notify();
   }
 

@@ -1,15 +1,13 @@
 import React from 'react';
-import { Moon, Sparkles, Flame } from 'lucide-react';
+import { Moon, Flame } from 'lucide-react';
 
 interface NavbarProps {
   streak: number;
-  onOpenCustomCreator: () => void;
   onToggleBlackScreen: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   streak,
-  onOpenCustomCreator,
   onToggleBlackScreen,
 }) => {
   return (
@@ -85,29 +83,6 @@ export const Navbar: React.FC<NavbarProps> = ({
           <span style={{ fontWeight: 600 }}>{streak}</span>
           <span className="navbar-streak-label" style={{ color: '#cbd5e1', fontSize: '0.72rem' }}>nights</span>
         </div>
-
-        {/* Custom Story Creator */}
-        <button
-          onClick={onOpenCustomCreator}
-          className="glass-pill"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            padding: '8px 12px',
-            fontSize: '0.82rem',
-            color: '#c084fc',
-            cursor: 'pointer',
-            border: '1px solid rgba(192, 132, 252, 0.35)',
-            background: 'rgba(192, 132, 252, 0.12)',
-            minHeight: '40px',
-            boxSizing: 'border-box',
-          }}
-          title="Create a personalized story for your child"
-        >
-          <Sparkles size={16} />
-          <span className="navbar-personalize-text">Create Story</span>
-        </button>
 
         {/* Black Screen Sleep Mode Quick Trigger */}
         <button

@@ -3,7 +3,6 @@ import { Navbar } from './components/Navbar';
 import { StoryCard } from './components/StoryCard';
 import { AudioPlayerModal } from './components/AudioPlayerModal';
 import { PitchBlackScreen } from './components/PitchBlackScreen';
-import { CustomStoryCreatorModal } from './components/CustomStoryCreatorModal';
 import { BEDTIME_STORIES } from './data/stories';
 import type { Story } from './data/stories';
 import { sleepPlayer } from './audio/sleepPlayer';
@@ -12,13 +11,13 @@ import type { AmbientType } from './audio/ambientSynth';
 import { Moon, CloudRain, Wind, Music, Waves, Volume2, ShieldCheck, Heart } from 'lucide-react';
 
 export function App() {
-  const [stories, setStories] = useState<Story[]>(BEDTIME_STORIES);
+  const [stories] = useState<Story[]>(BEDTIME_STORIES);
   const [favorites, setFavorites] = useState<string[]>(() => {
     try {
       const saved = localStorage.getItem('nabix_favorites') || localStorage.getItem('bedtimenest_favorites');
-      return saved ? JSON.parse(saved) : ['barnaby-bear'];
+      return saved ? JSON.parse(saved) : ['barnaby-bear', 'daisy-dinosaur'];
     } catch {
-      return ['barnaby-bear'];
+      return ['barnaby-bear', 'daisy-dinosaur'];
     }
   });
   const [streak, setStreak] = useState<number>(() => {
@@ -33,7 +32,6 @@ export function App() {
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [playerState, setPlayerState] = useState<PlayerState>(sleepPlayer.getState());
   const [showPlayerModal, setShowPlayerModal] = useState<boolean>(false);
-  const [showCustomCreator, setShowCustomCreator] = useState<boolean>(false);
 
   // Subscribe to Audio Player Controller
   useEffect(() => {
@@ -45,45 +43,12 @@ export function App() {
     };
   }, []);
 
-  // Load custom saved stories (with automatic migration to tts:custom narration)
-  useEffect(() => {
-    try {
-      const customSaved = localStorage.getItem('nabix_custom_stories') || localStorage.getItem('bedtimenest_custom_stories');
-      if (customSaved) {
-        const parsed = JSON.parse(customSaved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          const migrated: Story[] = parsed.map((s: Story) => {
-            if (s.id.startsWith('custom-') && (!s.audioUrl || s.audioUrl.includes('barnaby-bear'))) {
-              return { ...s, audioUrl: 'tts:custom' };
-            }
-            return s;
-          });
-          localStorage.setItem('nabix_custom_stories', JSON.stringify(migrated));
-          setStories([...BEDTIME_STORIES, ...migrated]);
-        }
-      }
-    } catch {
-      // Ignore
-    }
-  }, []);
-
   const handleToggleFavorite = (storyId: string) => {
     setFavorites((prev) => {
       const next = prev.includes(storyId) ? prev.filter((id) => id !== storyId) : [...prev, storyId];
       localStorage.setItem('nabix_favorites', JSON.stringify(next));
       return next;
     });
-  };
-
-  const handleSaveCustomStory = (newStory: Story) => {
-    setStories((prev) => {
-      const next = [newStory, ...prev];
-      const customOnly = next.filter((s) => s.id.startsWith('custom-'));
-      localStorage.setItem('nabix_custom_stories', JSON.stringify(customOnly));
-      return next;
-    });
-    sleepPlayer.playStory(newStory);
-    setShowPlayerModal(true);
   };
 
   const handlePlayStory = (story: Story) => {
@@ -107,9 +72,10 @@ export function App() {
   // Filtered stories
   const filteredStories = stories.filter((s) => {
     if (activeFilter === 'favorites') return favorites.includes(s.id);
-    if (activeFilter === 'busy-body') return s.theme.toLowerCase().includes('busy');
-    if (activeFilter === 'dark-safe') return s.theme.toLowerCase().includes('dark');
-    if (activeFilter === 'worries') return s.theme.toLowerCase().includes('worries');
+    if (activeFilter === 'busy-body') return s.theme.toLowerCase().includes('busy') || s.theme.toLowerCase().includes('body');
+    if (activeFilter === 'dark-safe') return s.theme.toLowerCase().includes('dark') || s.theme.toLowerCase().includes('safe');
+    if (activeFilter === 'worries') return s.theme.toLowerCase().includes('worries') || s.theme.toLowerCase().includes('comfort');
+    if (activeFilter === 'recharge') return s.theme.toLowerCase().includes('recharge') || s.theme.toLowerCase().includes('strong') || s.theme.toLowerCase().includes('journey');
     return true;
   });
 
@@ -118,7 +84,6 @@ export function App() {
       {/* Navbar */}
       <Navbar
         streak={streak}
-        onOpenCustomCreator={() => setShowCustomCreator(true)}
         onToggleBlackScreen={() => sleepPlayer.toggleBlackScreen(true)}
       />
 
@@ -254,11 +219,12 @@ export function App() {
             {/* Filter Pills */}
             <div className="no-scrollbar" style={{ display: 'flex', gap: '6px', overflowX: 'auto', paddingBottom: '4px' }}>
               {[
-                { id: 'all', label: '🌟 All' },
+                { id: 'all', label: `🌟 All (${stories.length})` },
                 { id: 'favorites', label: `⭐ Favs (${favorites.length})` },
                 { id: 'busy-body', label: '🐻 Busy Body' },
                 { id: 'dark-safe', label: '🦉 Safe Dark' },
-                { id: 'worries', label: '🦦 Worries' },
+                { id: 'worries', label: '🦦 Letting Go' },
+                { id: 'recharge', label: '🦊 Recharge' },
               ].map((tab) => {
                 const isSelected = activeFilter === tab.id;
                 return (
@@ -317,6 +283,7 @@ export function App() {
           ambientVolume={playerState.ambientVolume}
           ambientType={playerState.ambientType}
           timerMinutesRemaining={playerState.timerMinutesRemaining}
+          playbackRate={playerState.playbackRate}
           onTogglePlayPause={() => sleepPlayer.togglePlayPause()}
           onSeek={(sec) => sleepPlayer.seek(sec)}
           onSeekRelative={(d) => sleepPlayer.seekRelative(d)}
@@ -324,6 +291,7 @@ export function App() {
           onSetAmbientVolume={(v) => sleepPlayer.setAmbientVolume(v)}
           onSetAmbientType={(t) => sleepPlayer.setAmbientType(t)}
           onSetSleepTimer={(m) => sleepPlayer.setSleepTimer(m)}
+          onSetPlaybackRate={(r) => sleepPlayer.setPlaybackRate(r)}
           onToggleBlackScreen={() => sleepPlayer.toggleBlackScreen(true)}
           onClose={handleClosePlayer}
         />
@@ -337,14 +305,6 @@ export function App() {
           timerMinutesRemaining={playerState.timerMinutesRemaining}
           onTogglePlayPause={() => sleepPlayer.togglePlayPause()}
           onExit={() => sleepPlayer.toggleBlackScreen(false)}
-        />
-      )}
-
-      {/* Custom Personalized Story Creator Modal */}
-      {showCustomCreator && (
-        <CustomStoryCreatorModal
-          onClose={() => setShowCustomCreator(false)}
-          onSaveCustomStory={handleSaveCustomStory}
         />
       )}
     </div>

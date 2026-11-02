@@ -28,6 +28,7 @@ interface AudioPlayerModalProps {
   ambientVolume: number;
   ambientType: AmbientType;
   timerMinutesRemaining: number | null;
+  playbackRate: number;
   onTogglePlayPause: () => void;
   onSeek: (seconds: number) => void;
   onSeekRelative: (delta: number) => void;
@@ -35,6 +36,7 @@ interface AudioPlayerModalProps {
   onSetAmbientVolume: (volume: number) => void;
   onSetAmbientType: (type: AmbientType) => void;
   onSetSleepTimer: (minutes: number | null) => void;
+  onSetPlaybackRate: (rate: number) => void;
   onToggleBlackScreen: () => void;
   onClose: () => void;
 }
@@ -48,6 +50,7 @@ export const AudioPlayerModal: React.FC<AudioPlayerModalProps> = ({
   ambientVolume,
   ambientType,
   timerMinutesRemaining,
+  playbackRate,
   onTogglePlayPause,
   onSeek,
   onSeekRelative,
@@ -55,6 +58,7 @@ export const AudioPlayerModal: React.FC<AudioPlayerModalProps> = ({
   onSetAmbientVolume,
   onSetAmbientType,
   onSetSleepTimer,
+  onSetPlaybackRate,
   onToggleBlackScreen,
   onClose,
 }) => {
@@ -374,6 +378,43 @@ export const AudioPlayerModal: React.FC<AudioPlayerModalProps> = ({
           >
             <RotateCw size={20} />
           </button>
+        </div>
+
+        {/* Voice Playback Speed / Tempo Options */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', margin: '2px 0 6px 0' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', flexWrap: 'wrap' }}>
+            <span style={{ fontSize: '0.74rem', color: '#94a3b8', marginRight: '2px' }}>Pacing:</span>
+            {[
+              { label: '0.75x Slower', value: 0.75 },
+              { label: '0.85x Gentle', value: 0.85 },
+              { label: '1.0x Bedtime', value: 1.0 },
+              { label: '1.15x Clear', value: 1.15 },
+              { label: '1.25x Brisk', value: 1.25 },
+            ].map(speed => {
+              const isSelected = Math.abs(playbackRate - speed.value) < 0.04;
+              return (
+                <button
+                  type="button"
+                  key={speed.value}
+                  onClick={() => onSetPlaybackRate(speed.value)}
+                  style={{
+                    padding: '5px 11px',
+                    borderRadius: '9999px',
+                    border: isSelected ? '1px solid #fbbf24' : '1px solid rgba(255, 255, 255, 0.12)',
+                    background: isSelected ? 'rgba(251, 191, 36, 0.22)' : 'rgba(255, 255, 255, 0.05)',
+                    color: isSelected ? '#fbbf24' : '#cbd5e1',
+                    fontSize: '0.74rem',
+                    fontWeight: isSelected ? 700 : 500,
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease',
+                  }}
+                  title={`Play narration at ${speed.value}x speed`}
+                >
+                  {speed.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* Dual Audio Mixer Controls (Voice + Ambient) */}
